@@ -2,15 +2,12 @@
 
 This repository contains source code of azure functions for auto stop/start AKS and ADX services.
 
-
-
-## 1. Pre-requisite
----
+## 1. Prerequisite
 
 Create an app registration that will be the Azure identity used to trigger the Stop/Start:
-    - Name: `Cosmo Tech CRON For <platform_name>`
-    - `Contributor` role assigned on the platform resource group (containing AKS and ADX)
-    - Create a secret 
+* Name: `Cosmo Tech CRON For <platform_name>`
+* `Contributor` role assigned on the platform resource group (containing AKS and ADX)
+* Create a secret
 
 ## 2. Azure Function App deployment and configuration
 
@@ -40,16 +37,15 @@ All functions in the same function app share resources, per instance, as the fun
 
 You are done, then you can disable/enable each function from Azure portal in order to suspend/activate the stop/start of the platform components.
     
-## Trigger configuration
----
+## 3. Trigger configuration
 
 The default time zone used with the CRON expressions is Coordinated Universal Time (UTC). 
 To have your CRON expression based on another time zone, create an app setting for your function app named WEBSITE_TIME_ZONE.
----
+
 **NOTE:** 
 
 > WEBSITE_TIME_ZONE and TZ are not currently supported on the Linux Consumption plan.
----
+
 
 ```json
 ~/function.json
@@ -67,4 +63,4 @@ To have your CRON expression based on another time zone, create an app setting f
 ```
 > The 'Stop' timer is using the schedule 'Cron: '0 0 18 * * 1-5'' and the local time zone: '(UTC) Coordinated Universal Time'
 
-> For example, Europe/Paris Timezone (Linux) currently uses UTC+02:00 during summer time.
+> For example, Europe/Paris Time zone (Linux) currently uses UTC+02:00 during summer time and UTC+01:00 during winter time.
