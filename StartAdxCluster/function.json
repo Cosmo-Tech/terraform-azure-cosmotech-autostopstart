@@ -5,7 +5,8 @@
       "name": "startadxtimer",
       "type": "timerTrigger",
       "direction": "in",
-      "schedule": "0 0 6 * * 1-5"
+      "schedule": "0 0 7 * * 1-5",
+      "useMonitor": false
     }
   ]
 }
