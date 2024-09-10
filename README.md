@@ -24,8 +24,7 @@ All functions in the same function app share resources, per instance, as the fun
         * `0 0 19 * * 1-5` for Monday to Friday at 8:00pm GMT+1 (Paris winter time)
 * From VSCode Azure Extension, deploy the code to the Azure Function App you just created before
 * In Azure Portal > Function App > Configuration, add the following environment vairables:
-    * ADX_CLUSTER_NAME
-    * ADX_RESOURCE_GROUP
+    * ADX_CLUSTERS_CONFIG (example : [{"cluster_name": "cluster1", "resource_group": "group1"}, {"cluster_name": "cluster2", "resource_group": "group2"}, ...])
     * AKS_CLUSTER_NAME
     * AKS_RESOURCE_GROUP
     * AZURE_SUBSCRIPTION_ID
