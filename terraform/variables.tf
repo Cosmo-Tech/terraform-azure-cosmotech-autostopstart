@@ -19,6 +19,12 @@ variable "storage_account_name" {
   type        = string
 }
 
+variable "use_existing_storage_account" {
+  description = "Set to true to use an existing storage account, false to create a new one"
+  type        = bool
+  default     = false
+}
+
 variable "app_service_plan_name" {
   description = "The name of the App Service Plan"
   type        = string
@@ -63,35 +69,5 @@ variable "azure_client_secret" {
 
 variable "adx_clusters_config" {
   description = "JSON configuration for ADX clusters, format : [{\"cluster_name\": \"cluster1\", \"resource_group\": \"group1\"}]"
-  type        = string
-}
-
-variable "aks_resource_group" {
-  description = "The resource group name for AKS"
-  type        = string
-}
-
-variable "aks_cluster_name" {
-  description = "The AKS cluster name"
-  type        = string
-}
-
-variable "powerbi_resource_group" {
-  description = "The resource group name for Power BI"
-  type        = string
-}
-
-variable "powerbi_name" {
-  description = "The Power BI instance name"
-  type        = string
-}
-
-variable "vm_resource_group" {
-  description = "The resource group name for the VM"
-  type        = string
-}
-
-variable "vm_name" {
-  description = "The VM name"
   type        = string
 }
