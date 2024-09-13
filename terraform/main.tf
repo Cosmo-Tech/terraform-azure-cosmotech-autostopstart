@@ -18,10 +18,10 @@ module "azure_functions" {
   holiday_country           = var.holiday_country
   solidarity_day            = var.solidarity_day
   adx_clusters_config       = var.adx_clusters_config
-  # aks_resource_group        = var.aks_resource_group
-  # aks_cluster_name          = var.aks_cluster_name
-  # powerbi_resource_group    = var.powerbi_resource_group
-  # powerbi_name              = var.powerbi_name
-  # vm_resource_group         = var.vm_resource_group
-  # vm_name                   = var.vm_name
+  aks_resource_group        = var.aks_resource_group
+  aks_cluster_name          = var.aks_cluster_name
+  powerbi_resource_group    = var.powerbi_resource_group
+  powerbi_name              = var.powerbi_name
+  vm_resource_group         = var.vm_resource_group
+  vm_name                   = var.vm_name
 }

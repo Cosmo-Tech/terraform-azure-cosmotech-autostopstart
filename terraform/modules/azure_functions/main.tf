@@ -84,6 +84,12 @@ resource "azurerm_linux_function_app" "fa" {
     "AZURE_CLIENT_ID"                          = var.azure_client_id
     "AZURE_CLIENT_SECRET"                      = var.azure_client_secret
     "ADX_CLUSTERS_CONFIG"                      = var.adx_clusters_config
+    "AKS_RESOURCE_GROUP"                       = var.aks_resource_group
+    "AKS_CLUSTER_NAME"                         = var.aks_cluster_name
+    "POWERBI_RESOURCE_GROUP"                   = var.powerbi_resource_group
+    "POWERBI_NAME"                             = var.powerbi_name
+    "VM_RESOURCE_GROUP"                        = var.vm_resource_group
+    "VM_NAME"                                  = var.vm_name
   }
 
   site_config {
