@@ -22,6 +22,12 @@ resource "null_resource" "package_functions" {
       set -e
       set -x
 
+      if ! command -v zip &> /dev/null
+      then
+          echo "'zip' is not installed. Please install it."
+          exit 1
+      fi
+
       FUNCTIONS_DIR="${path.root}/../functions"
       ZIP_FILE="../terraform/functions.zip"
 
