@@ -11,6 +11,27 @@ resource "random_string" "function_app_version" {
   upper   = false
 }
 
+resource "null_resource" "package_functions" {
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+
+  provisioner "local-exec" {
+    command = <<EOT
+      #!/bin/bash
+      set -e
+      set -x
+
+      FUNCTIONS_DIR="${path.root}/../functions"
+      ZIP_FILE="../terraform/functions.zip"
+
+      rm -f "functions.zip"
+
+      cd "$FUNCTIONS_DIR" && zip -r "$ZIP_FILE" . || exit 1
+    EOT
+  }
+}
+
 resource "azurerm_resource_group" "rg" {
   count    = var.new_resource_group ? 1 : 0
   name     = var.resource_group_name
@@ -49,6 +70,8 @@ resource "azurerm_linux_function_app" "fa" {
   storage_account_access_key = local.storage_account_access_key
 
   app_settings = {
+    "ENABLE_ORYX_BUILD"                        = "true"
+    "SCM_DO_BUILD_DURING_DEPLOYMENT"           = "true"
     "AzureWebJobsStorage"                      = local.storage_connection_string
     "FUNCTIONS_EXTENSION_VERSION"              = "~4"
     "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING" = local.storage_connection_string
@@ -68,4 +91,8 @@ resource "azurerm_linux_function_app" "fa" {
       python_version = "3.10"
     }
   }
+
+  zip_deploy_file = "${path.root}/functions.zip"
+
+  depends_on = [null_resource.package_functions]
 }
