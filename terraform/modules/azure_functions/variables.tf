@@ -22,7 +22,7 @@ variable "storage_account_name" {
 variable "use_existing_storage_account" {
   description = "Set to true to use an existing storage account, false to create a new one"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "app_service_plan_name" {

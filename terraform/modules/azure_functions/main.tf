@@ -22,10 +22,9 @@ resource "null_resource" "package_functions" {
       set -e
       set -x
 
-      if ! command -v zip &> /dev/null
-      then
-          echo "'zip' is not installed. Please install it."
-          exit 1
+      if ! [ -x "$(command -v zip)" ]; then
+        echo "'zip' is not installed. Please install it."
+        exit 1
       fi
 
       FUNCTIONS_DIR="${path.root}/../functions"
@@ -67,6 +66,13 @@ resource "azurerm_service_plan" "asp" {
   sku_name            = "Y1"
 }
 
+resource "azurerm_application_insights" "app_insights" {
+  name                = "${var.function_app_name}-insights"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  application_type    = "web"
+}
+
 resource "azurerm_linux_function_app" "fa" {
   name                       = var.function_app_name
   location                   = var.location
@@ -79,6 +85,8 @@ resource "azurerm_linux_function_app" "fa" {
     "ENABLE_ORYX_BUILD"                        = "true"
     "SCM_DO_BUILD_DURING_DEPLOYMENT"           = "true"
     "AzureWebJobsStorage"                      = local.storage_connection_string
+    "APPINSIGHTS_INSTRUMENTATIONKEY"           = azurerm_application_insights.app_insights.instrumentation_key
+    "APPLICATIONINSIGHTS_CONNECTION_STRING"    = azurerm_application_insights.app_insights.connection_string
     "FUNCTIONS_EXTENSION_VERSION"              = "~4"
     "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING" = local.storage_connection_string
     "WEBSITE_CONTENTSHARE"                     = lower(var.function_app_name)

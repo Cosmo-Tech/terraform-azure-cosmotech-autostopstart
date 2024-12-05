@@ -141,3 +141,16 @@ __queuestorage__
 __azurite_db*__.json
 .python_packages
 values.json
+
+# Terraform
+.terraform.lock.hcl
+modules.json
+.terraform/
+.terraform.*
+terraform.*
+tfplan*
+out_*
+!terraform.tfvars
+!terraform.default.tfvars
+
+functions.zip
