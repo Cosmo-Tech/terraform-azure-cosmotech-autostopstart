@@ -29,6 +29,8 @@ locals {
   stop_hours             = var.stop_hours
   start_minutes          = var.start_minutes
   stop_minutes           = var.stop_minutes
+
+  tmp_dir = "/tmp/terraform-functions"
 }
 
 resource "random_string" "function_app_version" {
@@ -54,7 +56,7 @@ resource "null_resource" "package_functions" {
         exit 1
       fi
 
-      dir_tmp="/tmp/terraform-functions"
+      dir_tmp=${local.tmp_dir}
       file_archive="$dir_tmp/functions.zip"
 
       rm -rf $dir_tmp
@@ -113,7 +115,7 @@ resource "azurerm_service_plan" "asp" {
 resource "azurerm_log_analytics_workspace" "app_insights_workspace" {
   name                = "${var.function_app_name}-analytics-workspace"
   location            = var.location
-  resource_group_name = var.resource_group_name
+  resource_group_name = var.new_resource_group ? azurerm_resource_group.rg[0].name : var.resource_group_name
   sku                 = "PerGB2018"
   retention_in_days   = 30
 }
@@ -121,7 +123,7 @@ resource "azurerm_log_analytics_workspace" "app_insights_workspace" {
 resource "azurerm_application_insights" "app_insights" {
   name                = "${var.function_app_name}-analytics"
   location            = var.location
-  resource_group_name = var.resource_group_name
+  resource_group_name = var.new_resource_group ? azurerm_resource_group.rg[0].name : var.resource_group_name
   workspace_id        = azurerm_log_analytics_workspace.app_insights_workspace.id
   application_type    = "web"
 }
@@ -157,6 +159,12 @@ resource "azurerm_linux_function_app" "fa" {
     "POWERBI_NAME"                             = var.powerbi_name
     "VM_RESOURCE_GROUP"                        = var.vm_resource_group
     "VM_NAME"                                  = var.vm_name
+    "AzureWebJobs.ResumePowerBI.Disabled"      = "0"
+    "AzureWebJobs.StartStudioVM.Disabled"      = "0"
+    "AzureWebJobs.StopAdxCluster.Disabled"     = "0"
+    "AzureWebJobs.StopAks.Disabled"            = "0"
+    "AzureWebJobs.StopBowerBI.Disabled"        = "0"
+    "AzureWebJobs.StopStudioVM.Disabled"       = "0"
   }
 
   site_config {
@@ -165,7 +173,7 @@ resource "azurerm_linux_function_app" "fa" {
     }
   }
 
-  zip_deploy_file = "${path.root}/functions.zip"
+  zip_deploy_file = "${local.tmp_dir}/functions.zip"
 
   depends_on = [null_resource.package_functions]
 }
