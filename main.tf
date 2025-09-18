@@ -30,6 +30,13 @@ resource "azurerm_resource_group" "ressource_group" {
   location = var.location
 }
 
+resource "azurerm_role_assignment" "azure_client_assignment" {
+  scope                = "/subscriptions/${var.azure_subscription_id}/resourceGroups/${var.aks_resource_group}"
+  role_definition_name = "Contributor"
+  principal_id         = azuread_service_principal.azure_client_service_principal.object_id
+  depends_on = [azuread_application_registration.azure_client_app_registration]
+}
+
 data "azurerm_storage_account" "existing_sa" {
   count               = var.use_existing_storage_account ? 1 : 0
   name                = local.storage_account_name
@@ -43,8 +50,7 @@ resource "azurerm_storage_account" "sa" {
   location                 = var.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
-    depends_on = [azurerm_resource_group.ressource_group]
-
+  depends_on               = [azurerm_resource_group.ressource_group]
 }
 
 resource "azurerm_service_plan" "asp" {
@@ -53,7 +59,7 @@ resource "azurerm_service_plan" "asp" {
   resource_group_name = local.main_name
   os_type             = "Linux"
   sku_name            = "Y1"
-  depends_on = [azurerm_resource_group.ressource_group]
+  depends_on          = [azurerm_resource_group.ressource_group]
 }
 
 resource "azurerm_log_analytics_workspace" "app_insights_workspace" {
@@ -62,7 +68,7 @@ resource "azurerm_log_analytics_workspace" "app_insights_workspace" {
   resource_group_name = local.main_name
   sku                 = "PerGB2018"
   retention_in_days   = 30
-    depends_on = [azurerm_resource_group.ressource_group]
+  depends_on          = [azurerm_resource_group.ressource_group]
 
 }
 
@@ -72,7 +78,7 @@ resource "azurerm_application_insights" "app_insights" {
   resource_group_name = local.main_name
   workspace_id        = azurerm_log_analytics_workspace.app_insights_workspace.id
   application_type    = "web"
-    depends_on = [azurerm_resource_group.ressource_group]
+  depends_on          = [azurerm_resource_group.ressource_group]
 
 }
 
@@ -118,7 +124,7 @@ resource "null_resource" "package_functions" {
       chmod -R 777 $dir_tmp
     EOT
   }
-    depends_on = [azurerm_resource_group.ressource_group]
+  depends_on = [azurerm_resource_group.ressource_group]
 
 }
 
@@ -164,6 +170,10 @@ resource "azurerm_linux_function_app" "fa" {
   site_config {
     application_stack {
       python_version = "3.10"
+    }
+
+    cors {
+      allowed_origins = ["https://portal.azure.com"]
     }
   }
 
