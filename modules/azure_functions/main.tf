@@ -18,7 +18,8 @@ resource "null_resource" "package_functions" {
 
   provisioner "local-exec" {
     command = <<EOT
-      #!/bin/bash
+      #!/bin/sh
+
       set -e
       set -x
 
@@ -27,12 +28,29 @@ resource "null_resource" "package_functions" {
         exit 1
       fi
 
-      FUNCTIONS_DIR="${path.root}/../functions"
-      ZIP_FILE="../terraform/functions.zip"
+      dir_tmp="/tmp/terraform-functions"
+      file_archive="$dir_tmp/functions.zip"
 
-      rm -f "functions.zip"
+      rm -rf $dir_tmp
+      mkdir -p $dir_tmp/functions
+      cp -R ${path.root}/functions $dir_tmp/
 
-      cd "$FUNCTIONS_DIR" && zip -r "$ZIP_FILE" . || exit 1
+      functions_start="$(ls ${path.root}/functions | grep Start)"
+      for fstart in $functions_start; do
+        # echo $fstart
+        sed -i 's|%KEYSCHEDULE%|0 ${var.start_minutes} ${var.start_hours} * * 1-5|' $dir_tmp/functions/$fstart/function.json
+      done
+
+      functions_stop="$(ls ${path.root}/functions | grep Stop)"
+      for fstop in $functions_stop; do
+        # echo $fstop
+        sed -i 's|%KEYSCHEDULE%|0 ${var.stop_minutes} ${var.stop_hours} * * 1-5|' $dir_tmp/functions/$fstop/function.json
+      done
+
+      cd $dir_tmp/functions
+      zip -r "$file_archive" .
+
+      chmod -R 777 $dir_tmp
     EOT
   }
 }
@@ -66,12 +84,28 @@ resource "azurerm_service_plan" "asp" {
   sku_name            = "Y1"
 }
 
-resource "azurerm_application_insights" "app_insights" {
-  name                = "${var.function_app_name}-insights"
+resource "azurerm_log_analytics_workspace" "app_insights_workspace" {
+  name                = "${var.function_app_name}-analytics-workspace"
   location            = var.location
   resource_group_name = var.resource_group_name
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+}
+
+resource "azurerm_application_insights" "app_insights" {
+  name                = "${var.function_app_name}-analytics"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  workspace_id        = azurerm_log_analytics_workspace.app_insights_workspace.id
   application_type    = "web"
 }
+
+# resource "azurerm_application_insights" "app_insights" {
+#   name                = "${var.function_app_name}-insights"
+#   location            = var.location
+#   resource_group_name = var.resource_group_name
+#   application_type    = "web"
+# }
 
 resource "azurerm_linux_function_app" "fa" {
   name                       = var.function_app_name

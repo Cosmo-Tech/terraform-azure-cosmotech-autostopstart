@@ -22,7 +22,7 @@ variable "storage_account_name" {
 variable "use_existing_storage_account" {
   description = "Set to true to use an existing storage account, false to create a new one"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "app_service_plan_name" {
@@ -100,4 +100,20 @@ variable "vm_resource_group" {
 variable "vm_name" {
   description = "The VM name"
   type        = string
+}
+
+variable "stop_minutes" {
+  type = number
+}
+
+variable "stop_hours" {
+  type = number
+}
+
+variable "start_minutes" {
+  type = number
+}
+
+variable "start_hours" {
+  type = number
 }
