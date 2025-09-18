@@ -1,8 +1,3 @@
-variable "resource_group_name" {
-  description = "The name of the resource group"
-  type        = string
-}
-
 variable "new_resource_group" {
   description = "Whether to create a new resource group"
   type        = bool
@@ -14,25 +9,10 @@ variable "location" {
   type        = string
 }
 
-variable "storage_account_name" {
-  description = "The name of the storage account"
-  type        = string
-}
-
 variable "use_existing_storage_account" {
   description = "Set to true to use an existing storage account, false to create a new one"
   type        = bool
   default     = false
-}
-
-variable "app_service_plan_name" {
-  description = "The name of the App Service Plan"
-  type        = string
-}
-
-variable "function_app_name" {
-  description = "The name of the Function App"
-  type        = string
 }
 
 variable "holiday_country" {
@@ -54,17 +34,6 @@ variable "azure_subscription_id" {
 variable "azure_tenant_id" {
   description = "The Azure Tenant ID"
   type        = string
-}
-
-variable "azure_client_id" {
-  description = "The Azure Client ID (Service Principal ID)"
-  type        = string
-}
-
-variable "azure_client_secret" {
-  description = "The Azure Client Secret (Service Principal Secret)"
-  type        = string
-  sensitive   = true
 }
 
 variable "adx_clusters_config" {
