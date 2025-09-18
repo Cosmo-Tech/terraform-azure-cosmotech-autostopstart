@@ -2,14 +2,30 @@
 
 This repository contains source code of azure functions for auto stop/start AKS and ADX services.
 
-## 1. Prerequisite
+## Terraform deployment
+```
+git clone git@github.com:Cosmo-Tech/azure-function-app-stop-start.git
+cd azure-function-app-stop-start/terraform
+```
+
+```
+terraform init
+terraform plan -out tfplan
+```
+
+```
+terraform apply tfplan
+```
+
+## Manual deployment
+### 1. Prerequisite
 
 Create an app registration that will be the Azure identity used to trigger the Stop/Start:
 * Name: `Cosmo Tech CRON For <platform_name>`
 * `Contributor` role assigned on the platform resource group (containing AKS and ADX)
 * Create a secret
 
-## 2. Azure Function App deployment and configuration
+### 2. Azure Function App deployment and configuration
 
 Individual functions in a function app are deployed together and are scaled together. 
 All functions in the same function app share resources, per instance, as the function app scales.
@@ -36,7 +52,7 @@ All functions in the same function app share resources, per instance, as the fun
 
 You are done, then you can disable/enable each function from Azure portal in order to suspend/activate the stop/start of the platform components.
     
-## 3. Trigger configuration
+### 3. Trigger configuration
 
 The default time zone used with the CRON expressions is Coordinated Universal Time (UTC). 
 To have your CRON expression based on another time zone, create an app setting for your function app named WEBSITE_TIME_ZONE.
