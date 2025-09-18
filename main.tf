@@ -63,7 +63,7 @@ resource "azurerm_service_plan" "asp" {
 }
 
 resource "azurerm_log_analytics_workspace" "app_insights_workspace" {
-  name                = "${local.main_name}-analytics-workspace"
+  name                = "${local.main_name}"
   location            = var.location
   resource_group_name = local.main_name
   sku                 = "PerGB2018"
@@ -73,7 +73,7 @@ resource "azurerm_log_analytics_workspace" "app_insights_workspace" {
 }
 
 resource "azurerm_application_insights" "app_insights" {
-  name                = "${local.main_name}-analytics"
+  name                = "${local.main_name}"
   location            = var.location
   resource_group_name = local.main_name
   workspace_id        = azurerm_log_analytics_workspace.app_insights_workspace.id
