@@ -6,11 +6,8 @@ This repository contains source code of azure functions for auto stop/start AKS 
 * clone repository
 * configure terraform.tfvars
     * CRON schedules are UTC timezone
+    * function can be disabled
 
 ```
-terraform init
-terraform plan -out tfplan
-```
-```
-terraform apply tfplan
+./run-terraform.sh
 ```

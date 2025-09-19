@@ -2,7 +2,7 @@ azure_subscription_id  = "a24b131f-bd0b-42e8-872a-bded9b91ab74"
 azure_tenant_id        = "e413b834-8be8-4822-a370-be619545cb49"
 aks_resource_group     = "aks-devops"
 aks_cluster_name       = "aks-devops7hjyrn"
-adx_clusters_config    = ""
+adx_clusters_config    = [{"cluster_name": "<adx cluster name>", "resource_group": "<tenant resource group>"},]
 location               = "West Europe"
 powerbi_resource_group = ""
 powerbi_name           = ""
@@ -21,3 +21,12 @@ disable_stop_aks       = true
 disable_stop_adx       = true
 disable_stop_powerbi   = true
 disable_stop_studiovm  = true
+
+
+
+
+
+
+
+
+
