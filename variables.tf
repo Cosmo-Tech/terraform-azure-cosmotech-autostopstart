@@ -1,8 +1,8 @@
-variable "new_resource_group" {
-  description = "Whether to create a new resource group"
-  type        = bool
-  default     = false
-}
+# variable "new_resource_group" {
+#   description = "Whether to create a new resource group"
+#   type        = bool
+#   default     = false
+# }
 
 variable "location" {
   description = "The Azure region where resources will be created"
@@ -85,4 +85,36 @@ variable "start_minutes" {
 
 variable "start_hours" {
   type = number
+}
+
+variable "disable_start_aks" {
+  type = bool
+}
+
+variable "disable_start_adx" {
+  type = bool
+}
+
+variable "disable_start_powerbi" {
+  type = bool
+}
+
+variable "disable_start_studiovm" {
+  type = bool
+}
+
+variable "disable_stop_aks" {
+  type = bool
+}
+
+variable "disable_stop_adx" {
+  type = bool
+}
+
+variable "disable_stop_powerbi" {
+  type = bool
+}
+
+variable "disable_stop_studiovm" {
+  type = bool
 }

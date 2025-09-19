@@ -25,7 +25,7 @@ resource "azuread_service_principal" "azure_client_service_principal" {
 }
 
 resource "azurerm_resource_group" "ressource_group" {
-  count    = var.new_resource_group ? 1 : 0
+  # count    = var.new_resource_group ? 1 : 0
   name     = local.main_name
   location = var.location
 }
@@ -34,7 +34,7 @@ resource "azurerm_role_assignment" "azure_client_assignment" {
   scope                = "/subscriptions/${var.azure_subscription_id}/resourceGroups/${var.aks_resource_group}"
   role_definition_name = "Contributor"
   principal_id         = azuread_service_principal.azure_client_service_principal.object_id
-  depends_on = [azuread_application_registration.azure_client_app_registration]
+  depends_on           = [azuread_application_registration.azure_client_app_registration]
 }
 
 data "azurerm_storage_account" "existing_sa" {
@@ -63,7 +63,7 @@ resource "azurerm_service_plan" "asp" {
 }
 
 resource "azurerm_log_analytics_workspace" "app_insights_workspace" {
-  name                = "${local.main_name}"
+  name                = local.main_name
   location            = var.location
   resource_group_name = local.main_name
   sku                 = "PerGB2018"
@@ -73,7 +73,7 @@ resource "azurerm_log_analytics_workspace" "app_insights_workspace" {
 }
 
 resource "azurerm_application_insights" "app_insights" {
-  name                = "${local.main_name}"
+  name                = local.main_name
   location            = var.location
   resource_group_name = local.main_name
   workspace_id        = azurerm_log_analytics_workspace.app_insights_workspace.id
@@ -159,12 +159,14 @@ resource "azurerm_linux_function_app" "fa" {
     "POWERBI_NAME"                             = var.powerbi_name
     "VM_RESOURCE_GROUP"                        = var.vm_resource_group
     "VM_NAME"                                  = var.vm_name
-    "AzureWebJobs.StartPowerBI.Disabled"       = "0"
-    "AzureWebJobs.StartStudioVM.Disabled"      = "0"
-    "AzureWebJobs.StopAdxCluster.Disabled"     = "0"
-    "AzureWebJobs.StopAks.Disabled"            = "0"
-    "AzureWebJobs.StopPowerBI.Disabled"        = "0"
-    "AzureWebJobs.StopStudioVM.Disabled"       = "0"
+    "AzureWebJobs.StartAks.Disabled"           = var.disable_start_aks
+    "AzureWebJobs.StartAdxCluster.Disabled"    = var.disable_start_adx
+    "AzureWebJobs.StartPowerBI.Disabled"       = var.disable_start_powerbi
+    "AzureWebJobs.StartStudioVM.Disabled"      = var.disable_start_studiovm
+    "AzureWebJobs.StopAks.Disabled"            = var.disable_stop_aks
+    "AzureWebJobs.StopAdxCluster.Disabled"     = var.disable_stop_adx
+    "AzureWebJobs.StopPowerBI.Disabled"        = var.disable_stop_powerbi
+    "AzureWebJobs.StopStudioVM.Disabled"       = var.disable_stop_studiovm
   }
 
   site_config {
