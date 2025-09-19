@@ -118,3 +118,7 @@ variable "disable_stop_powerbi" {
 variable "disable_stop_studiovm" {
   type = bool
 }
+
+variable "adx_resource_groups" {
+  type = list(any)
+}

@@ -11,7 +11,7 @@ locals {
 }
 
 resource "azuread_application_registration" "azure_client_app_registration" {
-  display_name     = "azf-${var.aks_resource_group}-application-cron"
+  display_name     = local.main_name
   sign_in_audience = "AzureADMyOrg"
 }
 
@@ -30,8 +30,16 @@ resource "azurerm_resource_group" "ressource_group" {
   location = var.location
 }
 
-resource "azurerm_role_assignment" "azure_client_assignment" {
+resource "azurerm_role_assignment" "azure_client_assignment_aks" {
   scope                = "/subscriptions/${var.azure_subscription_id}/resourceGroups/${var.aks_resource_group}"
+  role_definition_name = "Contributor"
+  principal_id         = azuread_service_principal.azure_client_service_principal.object_id
+  depends_on           = [azuread_application_registration.azure_client_app_registration]
+}
+
+resource "azurerm_role_assignment" "azure_client_assignment_adx" {
+  for_each             = toset(var.adx_resource_groups)
+  scope                = "/subscriptions/${var.azure_subscription_id}/resourceGroups/${each.value}"
   role_definition_name = "Contributor"
   principal_id         = azuread_service_principal.azure_client_service_principal.object_id
   depends_on           = [azuread_application_registration.azure_client_app_registration]
@@ -44,8 +52,9 @@ data "azurerm_storage_account" "existing_sa" {
 }
 
 resource "azurerm_storage_account" "sa" {
-  count                    = var.use_existing_storage_account ? 0 : 1
-  name                     = replace(lower(local.main_name), "-", "")
+  count = var.use_existing_storage_account ? 0 : 1
+  # name                     = replace(lower(local.main_name), "-", "")
+  name                     = replace(lower("${var.aks_resource_group}ass"), "-", "")
   resource_group_name      = local.main_name
   location                 = var.location
   account_tier             = "Standard"
