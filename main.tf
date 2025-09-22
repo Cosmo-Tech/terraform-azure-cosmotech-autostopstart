@@ -24,7 +24,7 @@ resource "azuread_service_principal" "azure_client_service_principal" {
   client_id = azuread_application_registration.azure_client_app_registration.client_id
 }
 
-resource "azurerm_resource_group" "ressource_group" {
+resource "azurerm_resource_group" "rg" {
   # count    = var.new_resource_group ? 1 : 0
   name     = local.main_name
   location = var.location
@@ -59,7 +59,7 @@ resource "azurerm_storage_account" "sa" {
   location                 = var.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
-  depends_on               = [azurerm_resource_group.ressource_group]
+  depends_on               = [azurerm_resource_group.rg]
 }
 
 resource "azurerm_service_plan" "asp" {
@@ -68,16 +68,16 @@ resource "azurerm_service_plan" "asp" {
   resource_group_name = local.main_name
   os_type             = "Linux"
   sku_name            = "Y1"
-  depends_on          = [azurerm_resource_group.ressource_group]
+  depends_on          = [azurerm_resource_group.rg]
 }
 
-resource "azurerm_log_analytics_workspace" "app_insights_workspace" {
+resource "azurerm_log_analytics_workspace" "law" {
   name                = local.main_name
   location            = var.location
   resource_group_name = local.main_name
   sku                 = "PerGB2018"
   retention_in_days   = 30
-  depends_on          = [azurerm_resource_group.ressource_group]
+  depends_on          = [azurerm_resource_group.rg]
 
 }
 
@@ -85,9 +85,9 @@ resource "azurerm_application_insights" "app_insights" {
   name                = local.main_name
   location            = var.location
   resource_group_name = local.main_name
-  workspace_id        = azurerm_log_analytics_workspace.app_insights_workspace.id
+  workspace_id        = azurerm_log_analytics_workspace.law.id
   application_type    = "web"
-  depends_on          = [azurerm_resource_group.ressource_group]
+  depends_on          = [azurerm_resource_group.rg]
 
 }
 
@@ -133,7 +133,7 @@ resource "null_resource" "package_functions" {
       chmod -R 777 $dir_tmp
     EOT
   }
-  depends_on = [azurerm_resource_group.ressource_group]
+  depends_on = [azurerm_resource_group.rg]
 
 }
 

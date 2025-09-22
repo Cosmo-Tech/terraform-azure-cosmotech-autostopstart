@@ -1,13 +1,14 @@
-# Azure Functions Timer Trigger 
+# Terraform - Azure Functions Timer Trigger 
 
 This repository contains source code of azure functions for auto stop/start AKS and ADX services.
 
-## Terraform deployment
 * clone repository
 * configure terraform.tfvars
     * CRON schedules are UTC timezone
-    * function can be disabled
+    * functions can be disabled
 
 ```
 ./run-terraform.sh
 ```
+
+/!\ states are not stored, in case of modification needed, delete the old resource group and deploy again
