@@ -53,8 +53,7 @@ data "azurerm_storage_account" "existing_sa" {
 
 resource "azurerm_storage_account" "sa" {
   count = var.use_existing_storage_account ? 0 : 1
-  # name                     = replace(lower(local.main_name), "-", "")
-  name                     = replace(lower("${var.aks_resource_group}ass"), "-", "")
+  name                     = replace(lower("${var.aks_resource_group}cron"), "-", "")
   resource_group_name      = local.main_name
   location                 = var.location
   account_tier             = "Standard"
