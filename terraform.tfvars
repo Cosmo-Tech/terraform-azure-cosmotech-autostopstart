@@ -1,11 +1,11 @@
 azure_subscription_id = "a24b131f-bd0b-42e8-872a-bded9b91ab74"
 azure_tenant_id       = "e413b834-8be8-4822-a370-be619545cb49"
 location              = "West Europe"
-aks_resource_group    = "customer-delivery"
-aks_cluster_name      = "customer-deliveryhwvtrx"
+aks_resource_group    = "aks_resource_group_example"
+aks_cluster_name      = "aks_cluster_example"
 # adx_clusters_config    = ""
-adx_clusters_config    = "[{\"cluster_name\": \"kustocustomerdelivery\", \"resource_group\": \"customer-delivery-adp-adx-dev\"},{\"cluster_name\": \"kustoadeodevn8vbyh\", \"resource_group\": \"customer-delivery-adeo-dev\"},{\"cluster_name\": \"kustodcbeldevga4kqi\", \"resource_group\": \"customer-delivery-dcbel-dev\"}]"
-adx_resource_groups    = ["customer-delivery-adp-adx-dev","customer-delivery-adeo-dev","customer-delivery-dcbel-dev"]
+adx_clusters_config    = "[{\"cluster_name\": \"adxclusterexample1\", \"resource_group\": \"tenant_example1\"},{\"cluster_name\": \"adxclusterexample2\", \"resource_group\": \"tenant_example2\"},{\"cluster_name\": \"adxclusterexample3\", \"resource_group\": \"tenant_example3\"}]"
+adx_resource_groups    = ["tenant_example1","tenant_example2","tenant_example3"]
 powerbi_resource_group = ""
 powerbi_name           = ""
 vm_name                = ""
@@ -23,5 +23,3 @@ disable_stop_aks       = true
 disable_stop_adx       = true
 disable_stop_powerbi   = true
 disable_stop_studiovm  = true
-
-[{"cluster_name": "kustocustomerdelivery", "resource_group": "customer-delivery-adp-adx-dev"},{"cluster_name": "kustoadeodevn8vbyh", "resource_group": "customer-delivery-adeo-dev"},{"cluster_name": "kustodcbeldevga4kqi", "resource_group": "customer-delivery-dcbel-dev"}]
