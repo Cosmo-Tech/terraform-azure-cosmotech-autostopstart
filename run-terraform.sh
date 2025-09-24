@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# rm -rf .terraform*
-# rm -rf terraform.tfstate*
+rm -rf .terraform*
+rm -rf terraform.tfstate*
 
 
 terraform init

@@ -4,8 +4,8 @@ location              = "West Europe"
 aks_resource_group    = "customer-delivery"
 aks_cluster_name      = "customer-deliveryhwvtrx"
 # adx_clusters_config    = ""
-adx_clusters_config    = "[{\"cluster_name\": \"edremotsucotsuka4qyoa\", \"resource_group\": \"customer-delivery-adp-adx-qa\"}]"
-adx_resource_groups    = ["customer-delivery-adp-adx-qa"]
+adx_clusters_config    = "[{\"cluster_name\": \"kustocustomerdelivery\", \"resource_group\": \"customer-delivery-adp-adx-dev\"},{\"cluster_name\": \"kustoadeodevn8vbyh\", \"resource_group\": \"customer-delivery-adeo-dev\"},{\"cluster_name\": \"kustodcbeldevga4kqi\", \"resource_group\": \"customer-delivery-dcbel-dev\"}]"
+adx_resource_groups    = ["customer-delivery-adp-adx-dev","customer-delivery-adeo-dev","customer-delivery-dcbel-dev"]
 powerbi_resource_group = ""
 powerbi_name           = ""
 vm_name                = ""
@@ -13,8 +13,8 @@ vm_resource_group      = ""
 solidarity_day         = "11/11"
 stop_minutes           = 00
 stop_hours             = 19
-start_minutes          = 05
-start_hours            = 00
+start_minutes          = 00
+start_hours            = 05
 disable_start_aks      = true
 disable_start_adx      = true
 disable_start_powerbi  = true
@@ -23,3 +23,5 @@ disable_stop_aks       = true
 disable_stop_adx       = true
 disable_stop_powerbi   = true
 disable_stop_studiovm  = true
+
+[{"cluster_name": "kustocustomerdelivery", "resource_group": "customer-delivery-adp-adx-dev"},{"cluster_name": "kustoadeodevn8vbyh", "resource_group": "customer-delivery-adeo-dev"},{"cluster_name": "kustodcbeldevga4kqi", "resource_group": "customer-delivery-dcbel-dev"}]
